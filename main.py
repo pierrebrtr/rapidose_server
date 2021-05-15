@@ -8,6 +8,11 @@ from datetime import date, datetime, timedelta
 
 json_directory = cfg.jsonPath
 webhook_directory = cfg.webHookPath
+with open(
+    f"{webhook_directory}/webhooks.json",
+    "r",
+) as f:
+    webhook = json.load(f)
 
 threads_array = []
 
@@ -67,10 +72,10 @@ def handleProcess(jsonFile):
     ) as f:
         doctolib_lookup = json.load(f)
         end_date = date.today() + timedelta(days=2)
-
+        dep_number = jsonFile.split("splitted/")[1].split("_")[0]
+        webhook_url = webhook.get(f"{dep_number}")
         for dc_item in doctolib_lookup:
             slots = check_availabilities(dc_item)
-            webhook_url = "TODO"
             if slots["total"] > 0:
                 if console_prints:
                     print("Slots available")
@@ -102,7 +107,7 @@ def handleProcess(jsonFile):
 
 
 for filename in os.listdir(json_directory):
-    if filename.endswith(".json"):
+    if filename.endswith(".json") and webhook:
         process = multiprocessing.Process(
             target=handleProcess, args=(os.path.join(json_directory, filename),)
         )
