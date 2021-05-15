@@ -95,8 +95,11 @@ def handleProcess(jsonFile):
                         ):
                             if console_prints:
                                 print("Slots available")
+                            sections_url = dc_item["url"].split("/")
+                            city = sections_url[4].replace("d-","d'").replace("-"," ")
+                            center=sections_url[5].split("?")[0].replace("d-","d'").replace("-"," ")
                             send_alert(
-                                content="Dose de vaccin disponible",
+                                content="Dose de vaccin disponible dans la ville de "+city+"\n"+center,
                                 e_title=str(dates["date"]),
                                 e_desc="\n".join(slot_times),
                                 e_url=dc_item["url"],
