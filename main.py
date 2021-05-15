@@ -8,7 +8,7 @@ from datetime import date, datetime, timedelta
 
 json_directory = cfg.jsonPath
 webhook_directory = cfg.webHookPath
-console_prints = True
+console_prints = False
 with open(
     f"{webhook_directory}/webhooks.json",
     "r",
@@ -78,8 +78,6 @@ def handleProcess(jsonFile):
         for dc_item in doctolib_lookup:
             slots = check_availabilities(dc_item)
             if slots["total"] > 0:
-                if console_prints:
-                    print("Slots available")
                 for dates in slots["availabilities"]:
                     if len(dates["slots"]) > 0:
                         slot_times = [
@@ -95,6 +93,8 @@ def handleProcess(jsonFile):
                             end_date
                             > datetime.strptime(dates["date"], "%Y-%m-%d").date()
                         ):
+                            if console_prints:
+                                print("Slots available")
                             send_alert(
                                 content="Dose de vaccin disponible",
                                 e_title=str(dates["date"]),
