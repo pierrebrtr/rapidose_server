@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta
 
 json_directory = cfg.jsonPath
 webhook_directory = cfg.webHookPath
+console_prints = True
 with open(
     f"{webhook_directory}/webhooks.json",
     "r",
